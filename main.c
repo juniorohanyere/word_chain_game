@@ -26,11 +26,7 @@ int main(void)
 			start_word = get_word(line);
 			check = validate(start_word);
 			if (check == -1)
-			{
-				printf("\n");
-				printf("Invalid Word!\n");
-				printf("\n");
-			}
+				printf("\nInvalid Word!\n\n");
 			if (check == 0)
 			{
 				;
@@ -54,6 +50,10 @@ int main(void)
 		} while (check != 1);
 		word_chain(start_word, target_word);
 	}
+	free(line);
+	free(start_word);
+	free(target_word);
+
 	return (0);
 }
 
@@ -85,13 +85,15 @@ void word_chain(char *start_word, char *target_word)
 
 	step += chain2(intermediate, start_word, target_word);
 
-	printf("%s ", target_word);
-
-	if (step <= 1)
-		printf("(%d step)\n", step);
+	if (step == 0)
+		printf("No possible word chain found!\n");
+	else if (step == 1)
+		printf("%s (%d step)\n", target_word, step);
 	else
-		printf("(%d steps)\n", step);
+		printf("%s (%d steps)\n", target_word, step);
 	printf("\n");
+
+	free(intermediate);
 }
 
 /**
@@ -120,7 +122,7 @@ int chain1(char *str, char *str1, char *str2)
 		check = validate(str);
 		if (check == 1)
 		{
-			if (strcmp(str1, str) != 0)
+			if (strcmp(str, str1) != 0 && strcmp(str, str2) != 0)
 			{
 				printf("%s->", str);
 				j++;
@@ -160,7 +162,7 @@ int chain2(char *str, char *str1, char *str2)
 		check = validate(str);
 		if (check == 1)
 		{
-			if (strcmp(str, str2) != 0)
+			if (strcmp(str, str1) != 0 && strcmp(str, str2) != 0)
 			{
 				printf("%s->", str);
 				j++;
